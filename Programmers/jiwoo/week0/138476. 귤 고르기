@@ -1,0 +1,49 @@
+import java.util.*;
+class Solution {
+    public int solution(int k, int[] tangerine) {
+        HashMap<Integer, Tangerine> map = new HashMap<>();
+        for (int i : tangerine){
+            if (map.containsKey(i)){
+                map.get(i).plusOne();
+            }
+            else{
+                map.put(i, new Tangerine(i));
+            }
+        }
+        Tangerine[] tangerines = new Tangerine[map.size()];
+        Set<Integer> set = map.keySet();
+        int idx = 0;
+        for (int size : set){
+            tangerines[idx++] = map.get(size);
+        }
+        Arrays.sort(tangerines);
+        
+        //뒤에서부터 k개 주워담기
+        int answer = 0;
+        for (int i = tangerines.length-1;i>=0;i--){
+            answer++;
+            int now = tangerines[i].getCount();
+            k -= now;
+            if(k <= 0) break;
+        }
+        return answer;
+    }
+}
+
+class Tangerine implements Comparable<Tangerine>{
+    public final int size;
+    private int count = 1;
+    
+    public Tangerine(int size){
+        this.size = size;
+    }
+    public void plusOne(){
+        count++;
+    }
+    public int getCount(){
+        return count;
+    }
+    public int compareTo(Tangerine t){
+        return this.getCount() - t.getCount();
+    }
+}
