@@ -8,7 +8,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = Integer.parseInt(br.readLine());    // 테스트 케이스 수
 
-        StringBuilder sb = new StringBuilder();     // 출력
+        StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < T; i++) {
             String input = br.readLine();
@@ -17,6 +17,7 @@ public class Main {
             else sb.append("NO\n");
         }
 
+        // 출력
         System.out.print(sb);
     }
 
