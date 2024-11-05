@@ -1,0 +1,50 @@
+# 랜카드 고장 이슈로 오늘 (11/5)에 3개 올립니다!
+
+import java.util.*;
+
+public class Virus {
+    static ArrayList<Integer>[] network;
+    static boolean[] visited;
+    static int count = 0;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // 컴퓨터 수 및 네트워크 연결 정보 입력
+        int n = scanner.nextInt();  // 컴퓨터의 수
+        int m = scanner.nextInt();  // 연결된 쌍의 수
+
+        // 인접 리스트 초기화
+        network = new ArrayList[n + 1];
+        for (int i = 1; i <= n; i++) {
+            network[i] = new ArrayList<>();
+        }
+
+        // 네트워크 간선 정보 입력
+        for (int i = 0; i < m; i++) {
+            int a = scanner.nextInt();
+            int b = scanner.nextInt();
+            network[a].add(b);
+            network[b].add(a);
+        }
+
+        visited = new boolean[n + 1];
+
+        // 1번 컴퓨터에서 시작하는 DFS 탐색 시작
+        dfs(1);
+
+        System.out.println(count - 1); // 1번 컴퓨터 제외
+    }
+
+    public static void dfs(int node) {
+        visited[node] = true;
+        count++;  // 감염된 컴퓨터 수 증가
+
+        // 연결된 컴퓨터 탐색
+        for (int next : network[node]) {
+            if (!visited[next]) {
+                dfs(next);
+            }
+        }
+    }
+}
