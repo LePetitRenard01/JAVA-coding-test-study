@@ -1,0 +1,47 @@
+import java.util.Scanner;
+
+public class LanCableCutter {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // 입력 받기
+        int K = sc.nextInt(); // 가지고 있는 랜선 개수
+        int N = sc.nextInt(); // 필요한 랜선 개수
+        long[] cables = new long[K]; // 랜선 길이를 저장할 배열
+
+        long max = 0;
+        for (int i = 0; i < K; i++) {
+            cables[i] = sc.nextLong();
+            if (cables[i] > max) {
+                max = cables[i]; // 가장 긴 랜선의 길이 저장
+            }
+        }
+
+        // 이분 탐색을 위한 초기 변수 설정
+        long left = 1; // 랜선 길이는 1cm 이상
+        long right = max; // 가장 긴 랜선 길이
+        long result = 0; // 결과 저장
+
+        // 이분 탐색 시작
+        while (left <= right) {
+            long mid = (left + right) / 2; // 중간값
+            long count = 0; // N개의 랜선을 만들 수 있는지 확인
+
+            // mid 길이로 몇 개의 랜선을 만들 수 있는지 계산
+            for (long cable : cables) {
+                count += cable / mid;
+            }
+
+            // 랜선 개수가 N 이상이면 길이를 늘려도 됨
+            if (count >= N) {
+                result = mid; // 조건을 만족하는 경우 결과 저장
+                left = mid + 1;
+            } else {
+                right = mid - 1; // 랜선 개수가 부족하면 길이를 줄임
+            }
+        }
+
+        // 결과 출력
+        System.out.println(result);
+    }
+}
