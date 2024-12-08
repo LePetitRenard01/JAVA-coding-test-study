@@ -1,0 +1,43 @@
+import java.io.*;
+public class Main {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static int[][] graph;
+    public static void main(String[] args) throws IOException {
+        int n = Integer.parseInt(br.readLine());
+        graph = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            String row = br.readLine();
+            for (int j = 0; j < n; j++) {
+                if(row.charAt(j) == '1') graph[i][j] = 1;
+                else graph[i][j] = 0;
+            }
+        }
+        divideConquer(0, 0, n);
+        bw.flush();
+        bw.close();
+    }
+
+    static void divideConquer(int x, int y, int len) throws IOException {
+        if(check(x, y, len)){
+            bw.write(graph[x][y] + "");
+            return;
+        }
+        bw.write("(");
+        divideConquer(x, y, len/2);
+        divideConquer(x, y+len/2, len/2);
+        divideConquer(x+len/2, y, len/2);
+        divideConquer(x+len/2, y+len/2, len/2);
+        bw.write(")");
+    }
+
+    static boolean check(int x, int y, int len){
+        int flag = graph[x][y];
+        for(int i = x; i < x + len; i++){
+            for(int j = y; j < y + len; j++){
+                if(graph[i][j] != flag) return false;
+            }
+        }
+        return true;
+    }
+}
