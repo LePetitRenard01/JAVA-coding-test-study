@@ -1,0 +1,73 @@
+import java.util.*;
+
+public class SpyMission {
+    static int N, M;
+    static int[][] progress = new int[2][3]; // [0]은 정보 수집, [1]은 감시
+    static List<int[]> firstHalf = new ArrayList<>();
+    static List<int[]> secondHalf = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // 입력 받기
+        N = sc.nextInt();
+        M = sc.nextInt();
+        for (int i = 0; i < 3; i++) {
+            progress[0][i] = sc.nextInt(); // 정보 수집
+        }
+        for (int i = 0; i < 3; i++) {
+            progress[1][i] = sc.nextInt(); // 감시
+        }
+
+        // 문제를 두 부분으로 나누기
+        int mid = N / 2;
+
+        // 첫 번째 절반 계산
+        calculate(0, mid, 0, -1, new ArrayList<>(), firstHalf);
+
+        // 두 번째 절반 계산
+        calculate(mid, N, 0, -1, new ArrayList<>(), secondHalf);
+
+        // 결과 합치기
+        long result = combineResults();
+        System.out.println(result);
+    }
+
+    // 분할 재귀로 가능한 모든 경로 계산
+    static void calculate(int day, int end, int sum, int prevLocation, List<Integer> path, List<int[]> results) {
+        if (day == end) {
+            results.add(new int[]{sum, prevLocation});
+            return;
+        }
+        for (int task = 0; task < 2; task++) { // 정보 수집(0), 감시(1)
+            for (int location = 0; location < 3; location++) { // 수족관(0), 시청(1), 학교(2)
+                int gain = progress[task][location];
+                if (location == prevLocation) gain /= 2; // 전날과 같은 장소이면 진척도 절반
+                calculate(day + 1, end, sum + gain, location, path, results);
+            }
+        }
+    }
+
+    // 두 결과를 합쳐 M 이상 달성 가능한 방법의 수 계산
+    static long combineResults() {
+        long count = 0;
+
+        // 두 부분 결과를 합치기 위해 Map 사용
+        Map<Integer, Long> secondHalfMap = new HashMap<>();
+        for (int[] result : secondHalf) {
+            int sum = result[0];
+            secondHalfMap.put(sum, secondHalfMap.getOrDefault(sum, 0L) + 1);
+        }
+
+        for (int[] result : firstHalf) {
+            int sum1 = result[0];
+            for (int sum2 : secondHalfMap.keySet()) {
+                if (sum1 + sum2 >= M) {
+                    count += secondHalfMap.get(sum2);
+                }
+            }
+        }
+
+        return count;
+    }
+}
