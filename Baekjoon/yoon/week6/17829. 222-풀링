@@ -1,0 +1,44 @@
+import java.util.Scanner;
+import java.util.PriorityQueue;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // 행렬의 크기 입력
+        int N = sc.nextInt();
+        int[][] matrix = new int[N][N];
+
+        // 행렬 입력
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                matrix[i][j] = sc.nextInt();
+            }
+        }
+
+        // 222-풀링 반복
+        while (N > 1) {
+            int newSize = N / 2;
+            int[][] newMatrix = new int[newSize][newSize];
+
+            for (int i = 0; i < newSize; i++) {
+                for (int j = 0; j < newSize; j++) {
+                    // 2x2 블록에서 두 번째로 큰 값 찾기
+                    PriorityQueue<Integer> pq = new PriorityQueue<>(); // 작은 값부터 정렬
+                    for (int x = 0; x < 2; x++) {
+                        for (int y = 0; y < 2; y++) {
+                            pq.add(matrix[i * 2 + x][j * 2 + y]);
+                            if (pq.size() > 2) pq.poll(); // 두 번째 큰 값만 유지
+                        }
+                    }
+                    newMatrix[i][j] = pq.poll(); // 두 번째 큰 값 저장
+                }
+            }
+            matrix = newMatrix;
+            N = newSize;
+        }
+
+        // 최종 결과 출력
+        System.out.println(matrix[0][0]);
+    }
+}
