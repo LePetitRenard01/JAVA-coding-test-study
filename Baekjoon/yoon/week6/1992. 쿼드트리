@@ -1,0 +1,53 @@
+import java.util.Scanner;
+
+public class QuadTree {
+    static StringBuilder result = new StringBuilder();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // 입력 받기
+        int N = scanner.nextInt();
+        scanner.nextLine();
+        char[][] video = new char[N][N];
+        for (int i = 0; i < N; i++) {
+            video[i] = scanner.nextLine().toCharArray();
+        }
+
+        // 쿼드 트리
+        compress(video, 0, 0, N);
+        System.out.println(result.toString());
+
+        scanner.close();
+    }
+
+    // 쿼드 트리 압축 함수
+    public static void compress(char[][] video, int x, int y, int size) {
+        if (isUniform(video, x, y, size)) {
+            result.append(video[x][y]); // 모든 값이 같으면 값을 추가
+            return;
+        }
+
+        // 4개의 영역으로 나눔
+        int newSize = size / 2;
+        result.append("("); // 괄호로 묶기 시작
+        compress(video, x, y, newSize); // 왼쪽 위
+        compress(video, x, y + newSize, newSize); // 오른쪽 위
+        compress(video, x + newSize, y, newSize); // 왼쪽 아래
+        compress(video, x + newSize, y + newSize, newSize); // 오른쪽 아래
+        result.append(")"); // 괄호 닫기
+    }
+
+    // 해당 영역이 모두 같은 값인지 확인
+    public static boolean isUniform(char[][] video, int x, int y, int size) {
+        char first = video[x][y];
+        for (int i = x; i < x + size; i++) {
+            for (int j = y; j < y + size; j++) {
+                if (video[i][j] != first) {
+                    return false; // 다른 값이 발견되면 false 반환
+                }
+            }
+        }
+        return true;
+    }
+}
