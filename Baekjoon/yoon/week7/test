@@ -1,0 +1,25 @@
+public class BitMaskExample {
+    public static void main(String[] args) {
+
+        int[] arr = {1, 2, 3};
+        int target = 4;
+        int n = arr.length;
+        int count = 0;
+
+        for (int bit = 0; bit < (1 << n); bit++) {
+            int sum = 0;
+
+            for (int i = 0; i < n; i++) {
+                if ((bit & (1 << i)) != 0) {
+                    sum += arr[i];
+                }
+            }
+
+            if (sum == target) {
+                count++;
+            }
+        }
+
+        System.out.println("경우의 수: " + count);
+    }
+}
