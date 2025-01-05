@@ -1,0 +1,39 @@
+import java.util.*;
+import java.io.*;
+public class Main {
+    private static class Lecture{
+        int start, end;
+        Lecture(int start, int end){
+            this.start = start;
+            this.end = end;
+        }
+    }
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    public static void main(String[] args) throws IOException {
+        int n = Integer.parseInt(br.readLine());
+        PriorityQueue<Lecture> pq = new PriorityQueue<>((a,b)->a.start-b.start);
+        PriorityQueue<Integer> room = new PriorityQueue<>((a,b)->a-b);
+
+        for (int i = 0; i < n; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+            pq.add(new Lecture(start, end));
+        }
+
+        while (!pq.isEmpty()) {
+            Lecture lecture = pq.poll();
+            if (!room.isEmpty() && room.peek() <= lecture.start) {
+                room.poll();
+            }
+            room.add(lecture.end);
+        }
+
+        bw.write(room.size()+"");
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+
+}
