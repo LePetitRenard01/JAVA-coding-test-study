@@ -1,0 +1,42 @@
+import java.io.*;
+import java.util.*;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+public class Main {
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	static HashMap<Integer, ArrayDeque<Integer>> map = new HashMap<>();
+
+	public static void main(String[] args) throws IOException {
+		int cnt = 0;
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int n = Integer.parseInt(st.nextToken());
+		int p = Integer.parseInt(st.nextToken());
+		
+		for (int i = 0; i < n ; i++) {
+			 st = new StringTokenizer(br.readLine());
+			 int ni = Integer.parseInt(st.nextToken());
+			 int pi = Integer.parseInt(st.nextToken());
+			 if(!map.containsKey(ni)){
+				 map.put(ni, new ArrayDeque<>());
+			 }
+			 
+			 while(!map.get(ni).isEmpty() && map.get(ni).peek() > pi) {
+				 map.get(ni).pop();
+				 ++cnt;
+			 }
+			 
+			 if(!map.get(ni).isEmpty() && map.get(ni).peek() == pi)
+				 continue;
+			 
+			 map.get(ni).push(pi);
+			 ++cnt;
+		}
+		
+		bw.write(cnt+"");
+		bw.flush();
+		bw.close();
+		br.close();
+	}
+}
