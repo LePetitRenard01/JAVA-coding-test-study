@@ -1,0 +1,66 @@
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class Main {
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	
+	static int[][] matrix;
+	
+	public static void main(String[] args) throws IOException {
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
+		int r = Integer.parseInt(st.nextToken());
+		
+		matrix = new int[n][m];
+		for (int i = 0; i < n; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0 ; j < m ; j++) {
+				matrix[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
+		
+		for (int i = 0 ; i < r; i++)
+			spin();
+		
+		print();
+		
+		bw.flush();
+		bw.close();
+		br.close();
+	}
+
+	private static void print() throws IOException {
+		for (int[] mtx : matrix) {
+			for (int i : mtx) bw.write(i+ " ");
+			bw.write("\n");
+		}
+	}
+
+	private static void spin() throws IOException {
+		int smaller = Math.min(matrix.length, matrix[0].length);
+			for (int i = 0; i < smaller/2; i++) {
+				int firstCell = matrix[i][i];
+				//상
+				for (int j = i; j < matrix[0].length-i-1; j++) {
+					matrix[i][j] = matrix[i][j+1];
+				}
+				//우
+				for (int j = i; j < matrix.length-i-1;j++) {
+					matrix[j][matrix[0].length-i-1] = matrix[j+1][matrix[0].length-i-1];
+				}
+
+				//하
+				for (int j = matrix[0].length-i-1; j > i ;j--) {
+					matrix[matrix.length-i-1][j] = matrix[matrix.length-i-1][j-1];
+				}
+
+				//좌
+				for (int j = matrix.length-i-1; j > i; j--) {
+					matrix[j][i] = matrix[j-1][i];
+				}
+				matrix[i+1][i] = firstCell;
+			}
+	}
+}
