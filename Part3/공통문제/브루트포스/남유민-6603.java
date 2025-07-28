@@ -23,8 +23,6 @@ public class Main {
         // i = 1, visit[1] = false > arr[1] = S[1] = 2, > DFS(1, 2)
         // visit[2] 빼고 다 true니까
         // i = 2,  visit[2] = false > arr[2] = 3 > DFS(2, 3)
-
-
         for (int i = start; i < k; i++) {
             if (!visit[i]) {
                 visit[i] = true;
